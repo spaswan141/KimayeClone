@@ -1,4 +1,4 @@
-const {User,validate} = require("../models/user.model");
+const { User, validate } = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -27,22 +27,24 @@ module.exports.newuser = async function (req, res, next) {
   });
 };
 
-module.exports.loginUser=async(req,res)=>{
-    const user=await User.findOne({email:req.body.email})
-    if(!user){
-        return res.send({message:"Invalid email or password"})
-    }
-    const validPassword= await bcrypt.compare(req.body.password,user.password)
-    const token=user.generateAuthToken()
-    if(!validPassword){
-        return res.send({message:"Invalid password"})
-    }else{
-        
-        return res.send({message:"Login successful",token:token,name:user.name})
-    }
-
-}
-module.exports.users=async function(req, res){
-    const user=await User.find()
-    res.send(user)
-}
+module.exports.loginUser = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.send({ message: "Invalid email or password" });
+  }
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  const token = user.generateAuthToken();
+  if (!validPassword) {
+    return res.send({ message: "Invalid password" });
+  } else {
+    return res.send({
+      message: "Login successful",
+      token: token,
+      name: user.name,
+    });
+  }
+};
+module.exports.users = async function (req, res) {
+  const user = await User.find();
+  res.send(user);
+};
